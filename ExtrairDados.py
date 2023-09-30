@@ -8,9 +8,9 @@ reddit = praw.Reddit(
 )
 
 
-subreddit = reddit.subreddit('footballmanagergames')
+subreddit = reddit.subreddit('TesteLP')
 
-keyword = 'portugal'
+keyword = 'Exemplo'
 
 for submission in subreddit.hot(limit=10):  
     submission.comments.replace_more(limit=None)  
