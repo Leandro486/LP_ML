@@ -123,6 +123,7 @@ print(predictions)
 df = pd.DataFrame(metrics.confusion_matrix(y_test,predictions),index=['normal','water','fire','water','bug','grass','rock','psychic','fairy','ice','poison','ground','electric','ghost','flying','dark','fighting','steel'],columns=['normal','water','fire','water','bug','grass','rock','psychic','fairy','ice','poison','ground','electric','ghost','flying','dark','fighting','steel'])
 
 #print(df)
+print("Acertou no tipo normal: ")
 print(df.loc['normal','normal'])
 #print(data.isna().sum())
 #print(data.shape)
