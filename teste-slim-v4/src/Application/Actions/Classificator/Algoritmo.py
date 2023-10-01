@@ -19,15 +19,13 @@ from sklearn import metrics
 
 #carregamento do dataset
 data = pd.read_csv('pokemons.csv', encoding='utf-8')
-
 data.drop(['rank','evolves_from','type2','hp','atk','def','spatk','spdef','speed','total','height','weight','abilities'],axis=1,inplace=True)
-
 
 #text preprocessing
 
 #nltk.download('all')
-
 text = list(data['desc'])
+
 
 lemmatizer = WordNetLemmatizer()
 
@@ -62,8 +60,8 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33,random_
 
 
 
-print('Training data: ',X_train.shape)
-print('Testing data: ', X_test.shape)
+#print('Training data: ',X_train.shape)
+#print('Testing data: ', X_test.shape)
 
 #print(data.head())
 
@@ -93,9 +91,9 @@ print(predictions)
 #confusion matrix
 df = pd.DataFrame(metrics.confusion_matrix(y_test,predictions),index=['normal','water','fire','water','bug','grass','rock','psychic','fairy','ice','poison','ground','electric','ghost','flying','dark','fighting','steel'],columns=['normal','water','fire','water','bug','grass','rock','psychic','fairy','ice','poison','ground','electric','ghost','flying','dark','fighting','steel'])
 
-#print(df)
-print("Acertou no tipo normal: ")
-print(df.loc['normal','normal'])
+print(df)
+#print("Acertou no tipo normal: ")
+print(df.loc['ice','ice'])
 #print(data.isna().sum())
 #print(data.shape)
 
