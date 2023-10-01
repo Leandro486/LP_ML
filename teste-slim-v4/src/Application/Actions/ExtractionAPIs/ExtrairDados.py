@@ -13,11 +13,11 @@ subreddit = reddit.subreddit('TesteLP')
 keyword = 'Exemplo'
 
 for submission in subreddit.hot(limit=10):  # Limite de 10 postagens (você pode ajustar isso)
-    if keyword in submission.title:
-        print(f'Título: {submission.title}')
-        print(f'Autor: {submission.author}')
-        print(f'Pontuação: {submission.score}')
-        print(f'URL: {submission.url}')
+    #if keyword in submission.title:
+    print(f'Título: {submission.title}')
+    print(f'Autor: {submission.author}')
+    print(f'Pontuação: {submission.score}')
+    print(f'URL: {submission.url}')
     
     # Itere pelos comentários de cada postagem
     submission.comments.replace_more(limit=None)  # Carregar todos os comentários
