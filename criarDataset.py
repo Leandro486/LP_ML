@@ -16,7 +16,7 @@ reviews_positivas = read_reviews('acllmdb/train/pos',1)
 
 reviews = reviews_negativas + reviews_positivas
 
-df = pd.DataFrame(reviews, columns=['Texto','Pos/Neg'])
+df = pd.DataFrame(reviews, columns=['Text','Classification'])
 
 df.to_csv('dataset_reviews.csv',index=False)
 
