@@ -24,6 +24,15 @@ from sklearn import metrics
 #Dataset "dataset_reviews.csv"
 data = pd.read_csv('dataset_reviews.csv', encoding='utf-8')
 
+#Eliminar metade do meu dataset aleatoriamente
+#Estava a dar problemas porque era 25 mil instancias e estava a demorar 30 min a ler o dataset
+
+data = data.sample(frac=1, random_state=42)#baralha as linhas aleatoriamente
+
+metade_do_tamanho = len(data) // 25
+
+data = data.iloc[:metade_do_tamanho]
+
 #print(data.head())
 
 #text preprocessing
@@ -31,7 +40,7 @@ data = pd.read_csv('dataset_reviews.csv', encoding='utf-8')
 #nltk.download('all')
 #text = list(data['desc'])
 text = list(data['Text'])
-
+#print(text)
 lemmatizer = WordNetLemmatizer()
 
 corpus = []
@@ -52,9 +61,12 @@ for i in range(len(text)):
 
     corpus.append(r)
 
+    print(i)
+
 
 #data['desc'] = corpus
 data['Text'] = corpus
+#print(data['Text'].head())
 
 #X = data['desc']
 #y = data['type1']
@@ -91,8 +103,19 @@ print(predictions)
 
 #confusion matrix
 #df = pd.DataFrame(metrics.confusion_matrix(y_test,predictions),index=['normal','water','fire','water','bug','grass','rock','psychic','fairy','ice','poison','ground','electric','ghost','flying','dark','fighting','steel'],columns=['normal','water','fire','water','bug','grass','rock','psychic','fairy','ice','poison','ground','electric','ghost','flying','dark','fighting','steel'])
+df = pd.DataFrame(metrics.confusion_matrix(y_test,predictions),index=['Verdadeiro Previsto','Falso Previsto'],columns=['Verdadeiro Real','Falso Real'])
 
-#print(df)
+print(df)
+#Queremos os Verdadeiros Positivos, na Matriz de confusão como comentários positivos
+#Queremos os Verdadeiros Negativos, na Matriz de confusão como comentários negativos
+
+VP = df.at['Verdadeiro Previsto','Verdadeiro Real']
+FN = df.at['Falso Previsto','Falso Real']
+
+print("Comentários positivos: ",VP)
+print("Comentários negativos: ",FN)
+
+
 #print("Acertou no tipo normal: ")
 #print(df.loc['ice','ice'])
 #print(data.isna().sum())
