@@ -29,7 +29,7 @@ data = pd.read_csv('dataset_reviews.csv', encoding='utf-8')
 
 data = data.sample(frac=1, random_state=42)#baralha as linhas aleatoriamente
 
-metade_do_tamanho = len(data) // 25
+metade_do_tamanho = len(data) // 18
 
 data = data.iloc[:metade_do_tamanho]
 
@@ -42,6 +42,7 @@ data = data.iloc[:metade_do_tamanho]
 text = list(data['Text'])
 #print(text)
 lemmatizer = WordNetLemmatizer()
+
 
 corpus = []
 
@@ -85,8 +86,6 @@ cv = CountVectorizer()
 
 X_train_cv = cv.fit_transform(X_train)
 
-#print(X_train_cv.shape)
-
 
 #Model Training and Evaluation
 
@@ -99,6 +98,8 @@ X_test_cv = cv.transform(X_test)
 predictions = lr.predict(X_test_cv)
 
 print(predictions)
+
+
 
 
 #confusion matrix
@@ -116,10 +117,28 @@ print("Comentários positivos: ",VP)
 print("Comentários negativos: ",FN)
 
 
-#print("Acertou no tipo normal: ")
-#print(df.loc['ice','ice'])
-#print(data.isna().sum())
-#print(data.shape)
+#Pré-processamento de um novo comentário 
+
+novo_comentario = "Would not recommend this product to my friends, i hate this product"
+novo_comentario = re.sub('[^a-zA-Z]', ' ', novo_comentario)
+novo_comentario = novo_comentario.lower()
+novo_comentario = novo_comentario.split()
+novo_comentario = [word for word in novo_comentario if word not in stopwords.words('english')]
+novo_comentario = [lemmatizer.lemmatize(word) for word in novo_comentario]
+novo_comentario = ' '.join(novo_comentario)
+
+#Vetorizacao
+novo_comentario_cv = cv.transform([novo_comentario])
+
+
+#Classificacao
+previsao = lr.predict(novo_comentario_cv)
+print(novo_comentario)
+if previsao[0] == 1:
+    print("O comentário é positivo!")
+else:
+    print("O comentário é negativo.")
+
 
 #data['generation'].value_counts(normalize = True).plot.bar()
 #plt.show()
