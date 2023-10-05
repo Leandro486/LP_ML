@@ -1,20 +1,27 @@
 import os
 import pandas as pd
-import glob
 
-def read_reviews(path,tipo):
+
+def read_reviews(folder_path, label):
     reviews = []
-    for path in glob.glob(os.path.join(path, '*.txt')):
-        with open(path, 'r', encoding='utf-8') as file:
-            text = file.read()
-            reviews.append((text,tipo))
+    
+    os.chdir(folder_path)
+
+    for file in os.listdir():
+        if file.endswith(".txt"):
+            file_path = f"{folder_path}/{file}"
+            with open(file_path, 'r',encoding='utf-8') as f:
+                reviews.append((f.read(),label))
     return reviews
 
-reviews_negativas = read_reviews('acllmdb/train/neg',0)
 
-reviews_positivas = read_reviews('acllmdb/train/pos',1)
+reviews_negativas = read_reviews('C://Users//Leandro//Desktop//LP//aclImdb//train//neg',0)
+
+reviews_positivas = read_reviews('C://Users//Leandro//Desktop//LP//aclImdb//train//pos',1)
 
 reviews = reviews_negativas + reviews_positivas
+
+#print(reviews)
 
 df = pd.DataFrame(reviews, columns=['Text','Classification'])
 
