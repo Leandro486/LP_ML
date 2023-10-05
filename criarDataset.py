@@ -25,6 +25,9 @@ reviews = reviews_negativas + reviews_positivas
 
 df = pd.DataFrame(reviews, columns=['Text','Classification'])
 
-df.to_csv('dataset_reviews.csv',index=False)
+print(df.head())
+
+
+df.to_csv('C://Users//Leandro//Desktop//LP//dataset_reviews.csv',index=False)
 
 
