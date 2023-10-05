@@ -7,8 +7,6 @@ import re
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
-
-
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
@@ -18,14 +16,21 @@ from sklearn import metrics
 
 
 #carregamento do dataset
-data = pd.read_csv('pokemons.csv', encoding='utf-8')
-data.drop(['rank','evolves_from','type2','hp','atk','def','spatk','spdef','speed','total','height','weight','abilities'],axis=1,inplace=True)
+
+#Dataset "pokemons.csv"
+#data = pd.read_csv('pokemons.csv', encoding='utf-8')
+#data.drop(['rank','evolves_from','type2','hp','atk','def','spatk','spdef','speed','total','height','weight','abilities'],axis=1,inplace=True)
+
+#Dataset "dataset_reviews.csv"
+data = pd.read_csv('dataset_reviews.csv', encoding='utf-8')
+
+#print(data.head())
 
 #text preprocessing
 
 #nltk.download('all')
-text = list(data['desc'])
-
+#text = list(data['desc'])
+text = list(data['Text'])
 
 lemmatizer = WordNetLemmatizer()
 
@@ -48,22 +53,18 @@ for i in range(len(text)):
     corpus.append(r)
 
 
-data['desc'] = corpus
+#data['desc'] = corpus
+data['Text'] = corpus
 
-
-X = data['desc']
-
-y = data['type1']
-
+#X = data['desc']
+#y = data['type1']
+X = data['Text']
+y = data['Classification']
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33,random_state=123)
 
-
-
-#print('Training data: ',X_train.shape)
-#print('Testing data: ', X_test.shape)
-
-#print(data.head())
+print('Training data: ',X_train.shape)
+print('Testing data: ', X_test.shape)
 
 
 #Extracao de features
@@ -89,11 +90,11 @@ print(predictions)
 
 
 #confusion matrix
-df = pd.DataFrame(metrics.confusion_matrix(y_test,predictions),index=['normal','water','fire','water','bug','grass','rock','psychic','fairy','ice','poison','ground','electric','ghost','flying','dark','fighting','steel'],columns=['normal','water','fire','water','bug','grass','rock','psychic','fairy','ice','poison','ground','electric','ghost','flying','dark','fighting','steel'])
+#df = pd.DataFrame(metrics.confusion_matrix(y_test,predictions),index=['normal','water','fire','water','bug','grass','rock','psychic','fairy','ice','poison','ground','electric','ghost','flying','dark','fighting','steel'],columns=['normal','water','fire','water','bug','grass','rock','psychic','fairy','ice','poison','ground','electric','ghost','flying','dark','fighting','steel'])
 
-print(df)
+#print(df)
 #print("Acertou no tipo normal: ")
-print(df.loc['ice','ice'])
+#print(df.loc['ice','ice'])
 #print(data.isna().sum())
 #print(data.shape)
 
