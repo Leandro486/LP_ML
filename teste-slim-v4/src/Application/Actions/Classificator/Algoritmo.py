@@ -119,7 +119,7 @@ print("Comentários negativos: ",FN)
 
 #Pré-processamento de um novo comentário 
 
-novo_comentario = "Would not recommend this product to my friends, i hate this product"
+novo_comentario = "i hate this product"
 novo_comentario = re.sub('[^a-zA-Z]', ' ', novo_comentario)
 novo_comentario = novo_comentario.lower()
 novo_comentario = novo_comentario.split()
