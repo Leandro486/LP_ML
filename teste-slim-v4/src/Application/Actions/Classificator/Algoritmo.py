@@ -14,6 +14,11 @@ from sklearn.metrics import accuracy_score, classification_report
 from sklearn.linear_model import LogisticRegression
 from sklearn import metrics
 
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.naive_bayes import MultinomialNB
+
 
 #carregamento do dataset
 
@@ -97,9 +102,28 @@ X_test_cv = cv.transform(X_test)
 
 predictions = lr.predict(X_test_cv)
 
-print(predictions)
+#print(predictions)
 
+#Testar outros algoritmos
+algorithms = [
+    ('Logistic Regression', LogisticRegression()),
+    ('SVM', SVC()),
+    ('Decision Tree', DecisionTreeClassifier()),
+    ('Naive Bayes', MultinomialNB())
+]
 
+for name, algorithm in algorithms:
+    clf = algorithm
+    clf.fit(X_train_cv,y_train)
+    y_pred = clf.predict(X_test_cv)
+
+    accuracy = accuracy_score(y_test,y_pred)
+    classification_rep = classification_report(y_test,y_pred)
+
+    print(f"Algoritmo: {name}")
+    print(f"Precisão: {accuracy}")
+    print(f"Classificação: \n{classification_rep}")
+    print("="*50)
 
 
 #confusion matrix
