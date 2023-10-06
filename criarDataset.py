@@ -15,19 +15,28 @@ def read_reviews(folder_path, label):
     return reviews
 
 
-reviews_negativas = read_reviews('C://Users//Leandro//Desktop//LP//aclImdb//train//neg',0)
+#reviews_negativas = read_reviews('C://Users//Leandro//Desktop//LP//aclImdb//train//neg',0)
 
-reviews_positivas = read_reviews('C://Users//Leandro//Desktop//LP//aclImdb//train//pos',1)
+#reviews_positivas = read_reviews('C://Users//Leandro//Desktop//LP//aclImdb//train//pos',1)
 
-reviews = reviews_negativas + reviews_positivas
+#reviews = reviews_negativas + reviews_positivas
 
 #print(reviews)
 
-df = pd.DataFrame(reviews, columns=['Text','Classification'])
+#df = pd.DataFrame(reviews, columns=['Text','Classification'])
 
-print(df.head())
+#print(df.head())
+
+#df.to_csv('C://Users//Leandro//Desktop//LP//dataset_reviews.csv',index=False)
+
+comentarios = []
+
+with open('comentarios.txt','r') as ficheiro:
+    for linha in ficheiro:
+        comentarios.append(linha)
 
 
-df.to_csv('C://Users//Leandro//Desktop//LP//dataset_reviews.csv',index=False)
+for comentario in comentarios:
+    print(comentario)
 
 

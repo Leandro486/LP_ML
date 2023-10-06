@@ -105,25 +105,25 @@ predictions = lr.predict(X_test_cv)
 #print(predictions)
 
 #Testar outros algoritmos
-algorithms = [
-    ('Logistic Regression', LogisticRegression()),
-    ('SVM', SVC()),
-    ('Decision Tree', DecisionTreeClassifier()),
-    ('Naive Bayes', MultinomialNB())
-]
+#algorithms = [
+#    ('Logistic Regression', LogisticRegression()),
+#    ('SVM', SVC()),
+#    ('Decision Tree', DecisionTreeClassifier()),
+#    ('Naive Bayes', MultinomialNB())
+#]
 
-for name, algorithm in algorithms:
-    clf = algorithm
-    clf.fit(X_train_cv,y_train)
-    y_pred = clf.predict(X_test_cv)
+#for name, algorithm in algorithms:
+#    clf = algorithm
+#    clf.fit(X_train_cv,y_train)
+#    y_pred = clf.predict(X_test_cv)
 
-    accuracy = accuracy_score(y_test,y_pred)
-    classification_rep = classification_report(y_test,y_pred)
+#    accuracy = accuracy_score(y_test,y_pred)
+#    classification_rep = classification_report(y_test,y_pred)
 
-    print(f"Algoritmo: {name}")
-    print(f"Precisão: {accuracy}")
-    print(f"Classificação: \n{classification_rep}")
-    print("="*50)
+#    print(f"Algoritmo: {name}")
+#    print(f"Precisão: {accuracy}")
+#    print(f"Classificação: \n{classification_rep}")
+#    print("="*50)
 
 
 #confusion matrix
@@ -131,40 +131,38 @@ for name, algorithm in algorithms:
 df = pd.DataFrame(metrics.confusion_matrix(y_test,predictions),index=['Verdadeiro Previsto','Falso Previsto'],columns=['Verdadeiro Real','Falso Real'])
 
 print(df)
+
 #Queremos os Verdadeiros Positivos, na Matriz de confusão como comentários positivos
 #Queremos os Verdadeiros Negativos, na Matriz de confusão como comentários negativos
-
 VP = df.at['Verdadeiro Previsto','Verdadeiro Real']
 FN = df.at['Falso Previsto','Falso Real']
-
 print("Comentários positivos: ",VP)
 print("Comentários negativos: ",FN)
 
+#Avaliação de novos comentários
 
-#Pré-processamento de um novo comentário 
+comentarios = []
 
-novo_comentario = "i hate this product"
-novo_comentario = re.sub('[^a-zA-Z]', ' ', novo_comentario)
-novo_comentario = novo_comentario.lower()
-novo_comentario = novo_comentario.split()
-novo_comentario = [word for word in novo_comentario if word not in stopwords.words('english')]
-novo_comentario = [lemmatizer.lemmatize(word) for word in novo_comentario]
-novo_comentario = ' '.join(novo_comentario)
-
-#Vetorizacao
-novo_comentario_cv = cv.transform([novo_comentario])
+with open('comentarios.txt','r') as ficheiro:
+    for linha in ficheiro:
+        comentarios.append(linha)
 
 
-#Classificacao
-previsao = lr.predict(novo_comentario_cv)
-print(novo_comentario)
-if previsao[0] == 1:
-    print("O comentário é positivo!")
-else:
-    print("O comentário é negativo.")
+for comentario in comentarios:
+    comentario = re.sub('[^a-zA-Z]',' ',comentario)
+    comentario = comentario.lower()
+    comentario = comentario.split()
+    comentario = [word for word in comentario if word not in stopwords.words('english')]
+    comentario = [lemmatizer.lemmatize(word) for word in comentario]
+    comentario = ' '.join(comentario)
 
+    comentario_cv = cv.transform([comentario])
 
-#data['generation'].value_counts(normalize = True).plot.bar()
-#plt.show()
+    previsao = lr.predict(comentario_cv)
+    if previsao[0] == 1:
+        print(f"Comentário {comentario} positivo!")
+    else:
+        print(f"Comentário {comentario} negativo!")
+
 
 
