@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import nltk
+#import nltk
 
 import re
 from nltk.corpus import stopwords
@@ -9,15 +9,15 @@ from nltk.stem import WordNetLemmatizer
 
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.metrics import accuracy_score, classification_report
+#from sklearn.naive_bayes import MultinomialNB
+#from sklearn.metrics import accuracy_score, classification_report
 from sklearn.linear_model import LogisticRegression
 from sklearn import metrics
 
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.svm import SVC
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.naive_bayes import MultinomialNB
+#from sklearn.ensemble import RandomForestRegressor
+#from sklearn.svm import SVC
+#from sklearn.tree import DecisionTreeClassifier
+#from sklearn.naive_bayes import MultinomialNB
 
 
 #carregamento do dataset
@@ -160,9 +160,9 @@ for comentario in comentarios:
 
     previsao = lr.predict(comentario_cv)
     if previsao[0] == 1:
-        print(f"Comentário {comentario} positivo!")
+        print(f"Comentário [{comentario}] positivo!")
     else:
-        print(f"Comentário {comentario} negativo!")
+        print(f"Comentário [{comentario}] negativo!")
 
 
 
