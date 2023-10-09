@@ -10,7 +10,7 @@ reddit = praw.Reddit(
 
 subreddit = reddit.subreddit('TesteLP')
 
-keyword = 'Exemplo'
+keyword = 'Teste'
 
 for submission in subreddit.hot(limit=10):  # Limite de 10 postagens (você pode ajustar isso)
     #if keyword in submission.title:
@@ -26,5 +26,4 @@ for submission in subreddit.hot(limit=10):  # Limite de 10 postagens (você pode
         print(f'Autor do Comentário: {comment.author}')
         print(f'Pontuação do Comentário: {comment.score}')
         print('---')
-
 
