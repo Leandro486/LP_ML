@@ -32,13 +32,34 @@ for submission in subreddit.hot(limit=10):  # Limite de 10 postagens (você pode
 
 
 #API TWITTER
+class twitter_class:
+    def __init__(self,client_key,client_secret,access_token,access_token_secret):
+        self.client_key = client_key
+        self.client_secret = client_secret
+        self.access_token = access_token
+        self.access_token_secret = access_token_secret
 
-twitter = [
-    client_key='gOR0lfXzYDgmi3HE92X1MFxZC', 
-    client_secret='BQrR5ekfA8ji1O1IQB7GVpxCiX3UTJlymVaoHafPSNjAGfuTxX',
-    access_token='1706701378712633344-iyNfzFKAcpg3FeGXJ9swbkyziXNtxG',
-    access_token_secret='c8aaSir9XjjS5QbmEAvbiGgPj67dg2J696ZHTq9GBGylr'
-]
+twitter = twitter_class(
+    'gOR0lfXzYDgmi3HE92X1MFxZC', 
+    'BQrR5ekfA8ji1O1IQB7GVpxCiX3UTJlymVaoHafPSNjAGfuTxX',
+    '1706701378712633344-iyNfzFKAcpg3FeGXJ9swbkyziXNtxG',
+    'c8aaSir9XjjS5QbmEAvbiGgPj67dg2J696ZHTq9GBGylr'
+)
 
 
 auth = tweepy.OAuthHandler(twitter.client_key,twitter.client_secret)
+auth.set_access_token(twitter.access_token,twitter.access_token_secret)
+
+api_twitter = tweepy.API(auth)
+
+keyword_twitter = 'como'
+
+tweet_limit = 10
+
+tweets = api_twitter.search_tweets(q=keyword_twitter,count=tweet_limit)
+
+for tweet in tweets:
+    print(f'Tweet: {tweet.text}')
+    print(f'Utilizador: {tweet.user.screen_name}')
+    print(f'Data de criação: {tweet.create_at}')
+    print('---')
