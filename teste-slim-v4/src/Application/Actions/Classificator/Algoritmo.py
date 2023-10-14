@@ -34,7 +34,7 @@ data = pd.read_csv('dataset_reviews.csv', encoding='utf-8')
 
 data = data.sample(frac=1, random_state=42)#baralha as linhas aleatoriamente
 
-metade_do_tamanho = len(data) // 14
+metade_do_tamanho = len(data) // 18
 
 data = data.iloc[:metade_do_tamanho]
 

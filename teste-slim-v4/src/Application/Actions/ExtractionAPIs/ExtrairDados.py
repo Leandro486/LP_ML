@@ -58,23 +58,26 @@ def twitter_app():
                 self.access_token_secret = access_token_secret
 
         twitter = twitter_class(
-            'gOR0lfXzYDgmi3HE92X1MFxZC', 
-            'BQrR5ekfA8ji1O1IQB7GVpxCiX3UTJlymVaoHafPSNjAGfuTxX',
-            '1706701378712633344-iyNfzFKAcpg3FeGXJ9swbkyziXNtxG',
-            'c8aaSir9XjjS5QbmEAvbiGgPj67dg2J696ZHTq9GBGylr'
+            'dg5T1OqhR62oadQAnTcWEsmOV', 
+            'spfw2ygf2buFc1XpjXca9PVzvDydrCx0p94TYxIPtJphpM09qs',
+            '1706701378712633344-zJYlIQBf4aUERyhhxjwRFoPSWCG612',
+            '27fNjIUIu9S2VZ9EKDcxlTXtX2uJ758Wdg2BXWTQxcL2s'
         )
 
 
-        auth = tweepy.OAuthHandler(twitter.client_key,twitter.client_secret)
-        auth.set_access_token(twitter.access_token,twitter.access_token_secret)
+        auth = tweepy.OAuth1UserHandler(
+            twitter.client_key,twitter.client_secret,
+            twitter.access_token,twitter.access_token_secret
+        )
 
-        api_twitter = tweepy.API(auth)
 
-        keyword_twitter = 'como'
+        api = tweepy.API(auth, wait_on_rate_limit=True)
+
+        search_query = "'Messi' 'World Cup' -filter:retweets AND -filter:replies AND -filter:links"
 
         tweet_limit = 10
 
-        tweets = api_twitter.search_tweets(q=keyword_twitter,count=tweet_limit)
+        tweets = api.search_tweets(q=search_query,lang="en",count=tweet_limit,tweet_mode='extended')
 
         for tweet in tweets:
             print(f'Tweet: {tweet.text}')
@@ -83,7 +86,39 @@ def twitter_app():
             print('---')
 
 
+import requests
+import pandas as pd
+
+def func():
+    twitter_data = []
+
+    payload = {
+        'api_key': 'af72815ef323c3513189062ad5b1eccf',
+        'query': 'ronaldo',
+        'num': '10'
+    }
+
+    response = requests.get(
+        'https://api.scraperapi.com/structured/twitter/search',params=payload
+    )
+
+    data = response.json()
+    print(data.keys())
+
+    print(data['organic_results'][0]['snippet'])
+
+    all_tweets = data['organic_results']
+    for tweet in all_tweets:
+        #print(tweet)
+        twitter_data.append(tweet)
+
+    df = pd.DataFrame(twitter_data)
+    df.to_json('tweets.json',orient='index')
+    print(df)
+    
 
 
 
-facebook_app()
+#func()
+#twitter_app()
+#facebook_app()
