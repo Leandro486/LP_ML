@@ -27,7 +27,9 @@ from sklearn import metrics
 #data.drop(['rank','evolves_from','type2','hp','atk','def','spatk','spdef','speed','total','height','weight','abilities'],axis=1,inplace=True)
 
 #Dataset "dataset_reviews.csv"
-data = pd.read_csv('dataset_reviews.csv', encoding='utf-8')
+data = pd.read_csv('C:\\Users\\Leandro\\OneDrive\\Documentos\\GitHub\\LP_ML\\dataset_reviews.csv', encoding='utf-8')
+
+#Dataset "dataset.csv"
 
 #Eliminar metade do meu dataset aleatoriamente
 #Estava a dar problemas porque era 25 mil instancias e estava a demorar 30 min a ler o dataset
@@ -143,7 +145,7 @@ print("Comentários negativos: ",FN)
 
 comentarios = []
 
-with open('comentarios.txt','r') as ficheiro:
+with open('C:\\Users\\Leandro\\OneDrive\\Documentos\\GitHub\\LP_ML\\comentarios.txt','r') as ficheiro:
     for linha in ficheiro:
         comentarios.append(linha)
 
