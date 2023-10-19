@@ -2,28 +2,45 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 #import nltk
-
 import re
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
-
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
 #from sklearn.naive_bayes import MultinomialNB
 #from sklearn.metrics import accuracy_score, classification_report
 from sklearn.linear_model import LogisticRegression
 from sklearn import metrics
-
 #from sklearn.ensemble import RandomForestRegressor
 #from sklearn.svm import SVC
 #from sklearn.tree import DecisionTreeClassifier
 #from sklearn.naive_bayes import MultinomialNB
 
+import mysql.connector
+
+def conBD():
+    con = mysql.connector.connect(host='localhost',database='bd',user='root',password='estgoh')
+    if con.is_connected():
+        db_info = con.get_server_info()
+        print(db_info)
+        cursor = con.cursor()
+        cursor.execute("select database();")
+        linha = cursor.fetchone()
+        print("Conectado ",linha)
+
+    if con.is_connected():
+        cursor.close()
+        con.close()
+        print("Conexão fechada")
+
+
+
+conBD()
 
 #carregamento do dataset
 
 #Dataset "dataset_reviews.csv"
-data = pd.read_csv('C:\\Users\\Leandro\\OneDrive\\Documentos\\GitHub\\LP_ML\\dataset_reviews.csv', encoding='utf-8')
+data = pd.read_csv('C:\\Users\\Leandro\\OneDrive\\Documentos\\GitHub\\LP_ML\\Datasets\\dataset_reviews.csv', encoding='utf-8')
 
 #Eliminar metade do meu dataset aleatoriamente
 #Estava a dar problemas porque era 25 mil instancias e estava a demorar 30 min a ler o dataset
