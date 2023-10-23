@@ -19,23 +19,30 @@ from sklearn import metrics
 import mysql.connector
 
 def conBD():
-    con = mysql.connector.connect(host='localhost',database='bd',user='root',password='estgoh')
+    comments = []
+    con = mysql.connector.connect(host='sql210.infinityfree.com',database='if0_35288643_tabcomentarios',user='if0_35288643',password='Fofo4862')
     if con.is_connected():
-        db_info = con.get_server_info()
-        print(db_info)
+        #db_info = con.get_server_info()
+        #print(db_info)
         cursor = con.cursor()
-        cursor.execute("SELECT * FROM tabcomentarios")
-        linha = cursor.fetchone()
-        print("Conectado ",linha)
+        cursor.execute("SELECT * FROM tabcomentarios WHERE Classification IS NULL")
+        linha = cursor.fetchall()
+        #print("Conectado ",linha)
+        for row in linha:
+            id, text, date, social, classification = row
+            #print("ID: ",id)
+            #print("Text: ",text)
+            #print("Date: ",date)
+            #print("Social: ",social)
+            #print("Classification: ",classification)
 
-        
-
-
+            comments.append(text)
 
     if con.is_connected():
         cursor.close()
         con.close()
-        print("Conexão fechada")
+        return comments
+        #print("Conexão fechada")
 
 
 def classification():
@@ -118,9 +125,10 @@ def classification():
 
     #Avaliação de novos comentários
     comentarios = []
-    with open('C:\\Users\\Leandro\\OneDrive\\Documentos\\GitHub\\LP_ML\\comentarios.txt','r') as ficheiro:
-        for linha in ficheiro:
-            comentarios.append(linha)
+    #with open('C:\\Users\\Leandro\\OneDrive\\Documentos\\GitHub\\LP_ML\\comentarios.txt','r') as ficheiro:
+        #for linha in ficheiro:
+            #comentarios.append(linha)
+    comentarios = conBD()
 
     for comentario in comentarios:
         comentario = re.sub('[^a-zA-Z]',' ',comentario)
@@ -141,4 +149,4 @@ def classification():
 
 
 conBD()
-classification()
+#classification()
