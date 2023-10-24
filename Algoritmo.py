@@ -20,7 +20,7 @@ import mysql.connector
 
 def conBD():
     comments = []
-    con = mysql.connector.connect(host='sql210.infinityfree.com',database='if0_35288643_tabcomentarios',user='if0_35288643',password='Fofo4862')
+    con = mysql.connector.connect(host='localhost',database='bd',user='root',password='estgoh')
     if con.is_connected():
         #db_info = con.get_server_info()
         #print(db_info)
@@ -148,5 +148,5 @@ def classification():
 
 
 
-conBD()
-#classification()
+#conBD()
+classification()

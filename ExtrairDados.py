@@ -120,5 +120,6 @@ def func():
 
 
 #func()
+reddit_app()
 #twitter_app()
 #facebook_app()
