@@ -98,6 +98,67 @@ app.get('/executar-conBD/:socialMedia',(req, res) =>{
                         <footer>
                             Trabalho Universitário - LP - Leandro D'Água
                         </footer>
+                        <style>
+                        table {
+                            border-collapse: collapse;
+                            width: 50%;
+                            margin: 20px auto;
+                        }
+                        th, td {
+                            border: 1px solid #ddd;
+                            padding: 8px;
+                            text-align: left;
+                        }
+                        th {
+                            background-color: #f2f2f2;
+                        }
+                        tr:nth-child(even) {
+                            background-color: #f2f2f2;
+                        }
+                        
+                        /* Estilo para o contêiner que envolve o menu */
+                        .container {
+                            text-align: center;
+                        }
+                        h1{
+                            text-align: center;
+                        }
+                        
+                        /* Estilo para a lista não ordenada (ul) que contém os itens do menu */
+                        .nav ul {
+                            list-style: none;
+                            padding: 0;
+                            margin: 0;
+                        }
+                        
+                        /* Estilo para cada item do menu */
+                        .nav li {
+                            display: inline; /* Para alinhar os itens na mesma linha */
+                            margin: 0 15px; /* Espaçamento entre os itens do menu */
+                        }
+                        
+                        /* Estilo para os links do menu */
+                        .nav a {
+                            text-decoration: none;
+                            color: #333; /* Cor do texto do link */
+                            font-weight: bold; /* Peso da fonte */
+                        }
+                        
+                        /* Estilo para os links do menu ao passar o mouse sobre eles */
+                        .nav a:hover {
+                            color: #007BFF; /* Cor do texto ao passar o mouse */
+                        }
+                        
+                        footer {
+                            color:black; /* Cor do texto no rodapé */
+                            text-align: center; /* Alinhamento de texto no centro */
+                            padding: 10px; /* Espaçamento interno */
+                        }
+                        
+                        .hidden{
+                            display: none;
+                        }
+                        </style>
                     </body>
                 </html>
             `);
