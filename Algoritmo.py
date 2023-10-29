@@ -19,7 +19,7 @@ from sklearn import metrics
 import mysql.connector
 
 def conBD():
-    comments = []
+    comments = [[],[],[]]
     con = mysql.connector.connect(host='localhost',database='bd',user='root',password='estgoh')
     if con.is_connected():
         #db_info = con.get_server_info()
@@ -36,13 +36,23 @@ def conBD():
             #print("Social: ",social)
             #print("Classification: ",classification)
 
-            comments.append(text)
+            comments[0].append(id)
+            comments[1].append(text)
 
     if con.is_connected():
         cursor.close()
         con.close()
         return comments
         #print("Conexão fechada")
+
+def conBDUpdate(comments):
+    con = mysql.connector.connect(host='localhost',database='bd',user='root',password='estgoh')
+    if con.is_connected():
+        cursor = con.cursor()
+        for id, classificacao in zip(comments[0], comments[2]):
+            cursor.execute("UPDATE tabcomentarios SET Classification = %s WHERE id = %s", (classificacao, id))
+        con.commit()
+    
 
 
 def classification():
@@ -124,13 +134,15 @@ def classification():
     print("Comentários negativos: ",FN)
 
     #Avaliação de novos comentários
-    comentarios = []
+    comentarios = [[],[],[]]
     #with open('C:\\Users\\Leandro\\OneDrive\\Documentos\\GitHub\\LP_ML\\comentarios.txt','r') as ficheiro:
         #for linha in ficheiro:
             #comentarios.append(linha)
     comentarios = conBD()
 
-    for comentario in comentarios:
+    comentarios_class = [[],[],[]]
+
+    for id, comentario in zip(comentarios[0], comentarios[1]):
         comentario = re.sub('[^a-zA-Z]',' ',comentario)
         comentario = comentario.lower()
         comentario = comentario.split()
@@ -143,10 +155,16 @@ def classification():
         previsao = lr.predict(comentario_cv)
         if previsao[0] == 1:
             print(f"Comentário [{comentario}] positivo!")
+            comentarios_class[2].append(1)
+            comentarios_class[1].append(comentario)
+            comentarios_class[0].append(id)
         else:
             print(f"Comentário [{comentario}] negativo!")
+            comentarios_class[2].append(0)
+            comentarios_class[1].append(comentario)
+            comentarios_class[0].append(id)
+
+    conBDUpdate(comentarios_class)
 
 
-
-#conBD()
 classification()
