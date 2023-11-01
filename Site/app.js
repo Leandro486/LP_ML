@@ -1,19 +1,20 @@
 const http = require('http');
 const express = require('express');
 const app = express();
+const mysql = require('mysql2');
 
 
 const hostname = 'localhost';
 const port = 3000;
 
-const mysql = require('mysql2');
+const pool = mysql.createPool({
+    host: 'localhost',
+    user: 'root',
+    password: 'estgoh',
+    database: 'bd',
+    connectionLimit: 10 
+});
 
-    const connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: 'estgoh',
-        database: 'bd'
-    });
 
 /*
 function conBD(){
@@ -39,29 +40,30 @@ function conBD(){
                     console.log('Conexão encerrada com sucesso');
                 }
             });
-        });  
-        
+        });
     });
 }
 */
 
-function conBD(socialMedia, callback){
-    connection.connect((err) =>{
-        if(err){
-            console.error('Erro ao conectar com a bd: ',err);
+function conBD(socialMedia, callback) {
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.error('Erro ao obter conexão do pool: ', err);
             return;
         }
-        console.log('Conexão bem sucedida');
         
         const query = `SELECT * FROM tabcomentarios WHERE Social_media = "${socialMedia}"`;
 
-        connection.query(query, (err,results, fields) => {
-            if(err){
+        connection.query(query, (err, results, fields) => {
+            connection.release(); // Libera a conexão de volta para o pool
+
+            if (err) {
                 console.error('Erro na tabela: ', err);
-                return;
+                callback(err, null);
+            } else {
+                callback(null, results);
             }
-           callback(null, results);
-        }); 
+        });
     });
 }
 
@@ -92,13 +94,51 @@ app.get('/executar-conBD/:socialMedia',(req, res) =>{
                                 </ul>
                             </nav>
                         </div>
-                        <ul>
-                            ${results.map(result => `<li>${result.Text}</li>`).join('')}
-                        </ul>
+                        <h2>Comentários Positivos</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Text</th>
+                                    <th>Classificação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${results.filter(result => result.Classification === 1).map(result => `
+                                    <tr>
+                                        <td>${result.ID}</td>
+                                        <td>${result.Text}</td>
+                                        <td>${result.Classification}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                        <h2>Comentários Negativos</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Text</th>
+                                    <th>Classificação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            ${results.filter(result => result.Classification === 0).map(result => `
+                                    <tr>
+                                        <td>${result.ID}</td>
+                                        <td>${result.Text}</td>
+                                        <td>${result.Classification}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
                         <footer>
                             Trabalho Universitário - LP - Leandro D'Água
                         </footer>
                         <style>
+                        h2 {
+                            text-align:center;
+                        }
                         table {
                             border-collapse: collapse;
                             width: 50%;
