@@ -1,6 +1,8 @@
 import praw #reddit
 import tweepy #twitter
 import requests #facebook
+import mysql.connector
+
 
 #API REDDIT
 def reddit_app():
@@ -13,24 +15,30 @@ def reddit_app():
     subreddit = reddit.subreddit('TesteLP')
 
     keyword = 'Teste'
+    con = mysql.connector.connect(host='bd',database='lp',user='rafaela',password='rafaela17')
 
-    for submission in subreddit.hot(limit=10):  # Limite de 10 postagens (você pode ajustar isso)
-        #if keyword in submission.title:
-        print(f'Título: {submission.title}')
-        print(f'Autor: {submission.author}')
-        print(f'Pontuação: {submission.score}')
-        print(f'URL: {submission.url}')
-        
-        # Itere pelos comentários de cada postagem
-        submission.comments.replace_more(limit=None)  # Carregar todos os comentários
-        for comment in submission.comments.list():
-            print(f'Comentário: {comment.body}')
-            print(f'Autor do Comentário: {comment.author}')
-            print(f'Pontuação do Comentário: {comment.score}')
-            print('---')
+    for submission in subreddit.hot(limit=10):
+        text = submission.selftext  # Conteúdo do post
+        data = submission.date  # Nome do autor
+        social_media = 'Reddit'
+        classification = submission.score  # URL do post
 
 #API INSTAGRAM
+def instagram_app():
+    access_token = 'IGQWRNdElhV0ZAFS1ZANeXdUcS1QemVPUy0xMjJ1enJJMmp5Wm5tUHBWX1pQaU5LQlg0c09Da0lHeVd0M2Q3ZAi1pSUtTak45YWl2dktTb0w0V25uMFJ0OVF5TDBqQ2x1Y0tXMVAxMXJzN3BrQktVYU0zZAmlIS1RidWMZD'
+    user_id = 'greenenergyfusion'
 
+    # Endpoint para obter postagens do seu próprio perfil
+    endpoint = f'https://graph.instagram.com/v13.0/{user_id}/media?fields=id,caption,media_type,media_url,thumbnail_url,permalink,timestamp&access_token={access_token}'
+
+    response = requests.get(endpoint)
+
+    if response.status_code == 200:
+        data = response.json()
+        for post in data['data']:
+            print(f'Post: {post.get("caption", "Nenhuma legenda")}')
+    else:
+        print(f'Erro na solicitação: {response.status_code}')
 
 #API FACEBOOK
 def facebook_app():
@@ -123,3 +131,4 @@ def func():
 reddit_app()
 #twitter_app()
 #facebook_app()
+#instagram_app()
