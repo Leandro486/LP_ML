@@ -1,7 +1,10 @@
 import praw #reddit
 import tweepy #twitter
 import requests #facebook
-import mysql.connector
+#import mysql.connector
+from datetime import datetime
+import pandas as pd
+import snscrape.modules.twitter as sntwitter
 
 
 #API REDDIT
@@ -15,13 +18,15 @@ def reddit_app():
     subreddit = reddit.subreddit('TesteLP')
 
     keyword = 'Teste'
-    con = mysql.connector.connect(host='bd',database='lp',user='rafaela',password='rafaela17')
 
-    for submission in subreddit.hot(limit=10):
-        text = submission.selftext  # Conteúdo do post
-        data = submission.date  # Nome do autor
-        social_media = 'Reddit'
-        classification = submission.score  # URL do post
+    for submission in subreddit.hot(limit=10): 
+        print(f'Texto: {submission.selftext}')
+        timestamp = submission.created_utc
+        date = datetime.utcfromtimestamp(timestamp).strftime('%Y-%m-%d')
+        print(f'Data: {date}')
+        print(f'Rede Social: Reddit')
+        print(f'Classificação: {submission.score}')
+        print('---')
 
 #API INSTAGRAM
 def instagram_app():
@@ -36,28 +41,39 @@ def instagram_app():
     if response.status_code == 200:
         data = response.json()
         for post in data['data']:
-            print(f'Post: {post.get("caption", "Nenhuma legenda")}')
+            caption = post.get("caption", "Nenhuma legenda")
+            media_url = post.get("media_url", "URL da mídia não disponível")
+            timestamp = post.get("timestamp", "Data da postagem não disponível")
+            
+            print(f'Post: {caption}')
+            print(f'Media URL: {media_url}')
+            print(f'Timestamp: {timestamp}')
+            print('---')
     else:
         print(f'Erro na solicitação: {response.status_code}')
 
+if __name__ == "__main__":
+    instagram_app()
+
 #API FACEBOOK
 def facebook_app():
-    access_token = 'EAAOc0KF41aIBO41blFVqZB69PznvSoo5qEtTXiX9gONOywC1WxXyohE8HI0s8Upt6yFjwg7PZBE0NqvBsWr6jE7ikcEZCCpOekWiHchv2ZCMhS6nW135C3YZAqQZBZCshZA5yqxL6drmHnEGOcqKDfBHQ5BvIo5WlJzAxaojDdTaR1QjfQlKGWtgZC8MHZAboLDhdKksqVxuv3Dx0z4kjHcdZChzqEsZCL8elLuiXHtq'
-    keyword = 'exemplo'
+    access_token = 'EAAKMj6M8bpMBOwjTr9wZCU9zb9eMRMSydMN0RWy6HckYGHpjl0gFq4GZC5OfZCIkitmOht5YLc4RcF1PDypIktP3UiiwopmXZCNPr3hThnFhskNi7kb6kA3ZBtZBpizen86MvySPOguMtzi7X44S5mAAgZCTjiONQLz27KDK2SbZAdurMNSvCq8ZCQSNu2Ds0Q4u1biUjAqHL7huuIXyxEgjzJlrkb4ggzuZAZCaFZAdeMEqfKqVrFXNIBPG0ytyo5Fy7AZDZD'  
+    user_id = '190901262497519'
 
-    url = f'https://graph.facebook.com/v18.0/search?q={keyword}&type=post&access_token={access_token}'
- 
+    url = f'https://graph.facebook.com/v18.0/{user_id}/posts?access_token={access_token}'
+
     response = requests.get(url)
     data = response.json()
+
     if 'data' in data:
         for post in data['data']:
             print(post)
     else:
-        print(data) 
+        print(data)
 
 
 #API TWITTER
-def twitter_app():
+def twitter_appi():
         class twitter_class:
             def __init__(self,client_key,client_secret,access_token,access_token_secret):
                 self.client_key = client_key
@@ -97,38 +113,43 @@ def twitter_app():
 import requests
 import pandas as pd
 
-def func():
+def twitter_app():
     twitter_data = []
 
     payload = {
         'api_key': 'af72815ef323c3513189062ad5b1eccf',
-        'query': 'ronaldo',
+        'query': 'teste',
         'num': '10'
     }
 
     response = requests.get(
-        'https://api.scraperapi.com/structured/twitter/search',params=payload
+        'https://api.scraperapi.com/structured/twitter/search', params=payload
     )
 
     data = response.json()
     print(data.keys())
 
-    print(data['organic_results'][0]['snippet'])
-
     all_tweets = data['organic_results']
     for tweet in all_tweets:
-        #print(tweet)
-        twitter_data.append(tweet)
+        content = tweet.get('snippet', 'Nenhum conteúdo disponível')  # Obtém o conteúdo ou retorna 'Nenhum conteúdo disponível'
+        date = tweet.get('time', 'Data não disponível')  # Obtém a data ou retorna 'Data não disponível'
+        social_media = 'Twitter'
+        score = 'Classificação não disponível'
+        print(f'Texto: {content}')
+        print(f'Data: {date}')
+        print(f'Rede Social: {social_media}')
+        print(f'Classificação: {score}')
+        print('---')
+
+        twitter_data.append({'Conteúdo': content, 'Data': date, 'Rede Social': social_media, 'Classificação': score})
 
     df = pd.DataFrame(twitter_data)
-    df.to_json('tweets.json',orient='index')
-    print(df)
+    df.to_json('tweets.json', orient='index')
+    #print(df)
     
 
-
-
 #func()
-reddit_app()
+#reddit_app()
 #twitter_app()
 #facebook_app()
-#instagram_app()
+instagram_app()

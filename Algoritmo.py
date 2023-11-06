@@ -52,8 +52,6 @@ def conBDUpdate(comments):
         for id, classificacao in zip(comments[0], comments[2]):
             cursor.execute("UPDATE tabcomentarios SET Classification = %s WHERE id = %s", (classificacao, id))
         con.commit()
-    
-
 
 def classification():
     #carregamento do dataset
