@@ -37,7 +37,7 @@ def reddit_app():
     )
 
     subreddit = reddit.subreddit('all')
-    keywords = 'teste'
+    keywords = 'tester'
 
     for submission in subreddit.search(keywords, limit=1000):
         text = submission.selftext
@@ -137,7 +137,7 @@ def twitter_app():
 
     payload = {
         'api_key': 'af72815ef323c3513189062ad5b1eccf',
-        'query': 'teste',
+        'query': 'tester',
         'num': '1000'
     }
 
