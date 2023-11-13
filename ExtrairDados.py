@@ -1,11 +1,32 @@
 import praw #reddit
 import tweepy #twitter
 import requests #facebook
-#import mysql.connector
+import mysql.connector
 from datetime import datetime
 import pandas as pd
 import snscrape.modules.twitter as sntwitter
 
+def insertBD(text, date, social):
+    con = mysql.connector.connect(
+        host='localhost',
+        user='rafaela',
+        password='rafaela17',
+        database='lp'
+    )
+
+    if con.is_connected():
+        cursor = con.cursor()
+        query = "INSERT INTO tabcomentarios (Text, Date, Social_Media) VALUES (%s, %s, %s)"
+        values = (text, date, social)
+        
+        try:
+            cursor.execute(query, values)
+            con.commit()  # Commit the changes
+        except mysql.connector.Error as err:
+            print(f"Erro ao inserir na base de dados: {err}")
+        finally:
+            cursor.close()
+            con.close()
 
 #API REDDIT
 def reddit_app():
@@ -15,22 +36,21 @@ def reddit_app():
         user_agent='Leandro&Filhos'
     )
 
-    subreddit = reddit.subreddit('TesteLP')
+    subreddit = reddit.subreddit('all')
+    keywords = 'tester'
 
-    keyword = 'Teste'
-
-    for submission in subreddit.hot(limit=10): 
-        print(f'Texto: {submission.selftext}')
+    for submission in subreddit.search(keywords, limit=1000):
+        text = submission.selftext
         timestamp = submission.created_utc
         date = datetime.utcfromtimestamp(timestamp).strftime('%Y-%m-%d')
-        print(f'Data: {date}')
-        print(f'Rede Social: Reddit')
-        print(f'Classificação: {submission.score}')
-        print('---')
+        social = 'Reddit'
+        classification = submission.score
+        if text:  # Verifica se o texto não está vazio
+            insertBD(text, date, social)
 
 #API INSTAGRAM
 def instagram_app():
-    access_token = 'IGQWRNdElhV0ZAFS1ZANeXdUcS1QemVPUy0xMjJ1enJJMmp5Wm5tUHBWX1pQaU5LQlg0c09Da0lHeVd0M2Q3ZAi1pSUtTak45YWl2dktTb0w0V25uMFJ0OVF5TDBqQ2x1Y0tXMVAxMXJzN3BrQktVYU0zZAmlIS1RidWMZD'
+    access_token = 'IGQWRNVkcwSGhSb3l0YnAzYktFZA3U4NUZAWTkF2ZAGVNb3dXR3FXc0VFb25zajJLWWRBaUtPWDI0bTJidnk2ZAWtrZAllIb2lqalpzbmE5QUNtckU3ajZA0WGRFdDFpUFNqeVJ0NG9Gc1FDTzJ4V2VkRk5fSmtteDZA2M2cZD'
     user_id = 'greenenergyfusion'
 
     # Endpoint para obter postagens do seu próprio perfil
@@ -52,15 +72,12 @@ def instagram_app():
     else:
         print(f'Erro na solicitação: {response.status_code}')
 
-if __name__ == "__main__":
-    instagram_app()
-
 #API FACEBOOK
 def facebook_app():
-    access_token = 'EAAKMj6M8bpMBOwjTr9wZCU9zb9eMRMSydMN0RWy6HckYGHpjl0gFq4GZC5OfZCIkitmOht5YLc4RcF1PDypIktP3UiiwopmXZCNPr3hThnFhskNi7kb6kA3ZBtZBpizen86MvySPOguMtzi7X44S5mAAgZCTjiONQLz27KDK2SbZAdurMNSvCq8ZCQSNu2Ds0Q4u1biUjAqHL7huuIXyxEgjzJlrkb4ggzuZAZCaFZAdeMEqfKqVrFXNIBPG0ytyo5Fy7AZDZD'  
-    user_id = '190901262497519'
+    access_token = 'EAAOc0KF41aIBO6ZBbnpSVyOMEXQTfUZBjCVKK6a3cFsHw9l8zdVt3xklZA7FdI2ZBZCkHiZCXyO4SBNdQN5fRx3SANDhc6eBQDFd2j32JAUZAPIYSdtOvtlQbLw9697Bo56RZBeD8lpbL0ui1ddtLSzJHfvCgNXfcoWDJZC1nRat40InaylovrSeIhXt4Wc80hEf7'  
+    page_id = '61553130849319'
 
-    url = f'https://graph.facebook.com/v18.0/{user_id}/posts?access_token={access_token}'
+    url = f'https://graph.facebook.com/v18.0/{page_id}/posts?access_token={access_token}'
 
     response = requests.get(url)
     data = response.json()
@@ -114,12 +131,14 @@ import requests
 import pandas as pd
 
 def twitter_app():
+    date = datetime.now()
+    date_formatted = date.strftime('%Y-%m-%d')
     twitter_data = []
 
     payload = {
         'api_key': 'af72815ef323c3513189062ad5b1eccf',
-        'query': 'teste',
-        'num': '10'
+        'query': 'tester',
+        'num': '1000'
     }
 
     response = requests.get(
@@ -135,21 +154,20 @@ def twitter_app():
         date = tweet.get('time', 'Data não disponível')  # Obtém a data ou retorna 'Data não disponível'
         social_media = 'Twitter'
         score = 'Classificação não disponível'
-        print(f'Texto: {content}')
-        print(f'Data: {date}')
-        print(f'Rede Social: {social_media}')
-        print(f'Classificação: {score}')
-        print('---')
+        #print(f'Texto: {content}')
+        #print(f'Data: {date_formatted}')
+        #print(f'Rede Social: {social_media}')
+        #print(f'Classificação: {score}')
+        #print('---')
 
-        twitter_data.append({'Conteúdo': content, 'Data': date, 'Rede Social': social_media, 'Classificação': score})
-
-    df = pd.DataFrame(twitter_data)
-    df.to_json('tweets.json', orient='index')
+        if content:  # Verifica se o texto não está vazio
+            insertBD(content, date_formatted, social_media)
     #print(df)
     
 
 #func()
-#reddit_app()
-#twitter_app()
+#insertBD()
+reddit_app()
+twitter_app()
 #facebook_app()
-instagram_app()
+#instagram_app()
