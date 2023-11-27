@@ -88,14 +88,13 @@ app.get('/',(req,res) =>{
                     <ul>
                         <li><a href="/">Home</a></li>
                         <li><a href="/executar-conBD/reddit">Reddit</a></li>
-                        <li><a href="/executar-conBD/facebook">Facebook</a></li>
                         <li><a href="/executar-conBD/twitter">Twitter</a></li>
                     </ul>
                 </nav>
             </div>
             
             <footer>
-                Trabalho Universitário - LP - Leandro D'Água
+                Trabalho Universitário - LP - Leandro D'Água, Rafaela Pereira
             </footer>
             <style>
             h2 {
@@ -187,7 +186,6 @@ app.get('/executar-conBD/:socialMedia',(req, res) =>{
                                 <ul>
                                     <li><a href="/">Home</a></li>
                                     <li><a href="/executar-conBD/reddit">Reddit</a></li>
-                                    <li><a href="/executar-conBD/facebook">Facebook</a></li>
                                     <li><a href="/executar-conBD/twitter">Twitter</a></li>
                                 </ul>
                             </nav>
@@ -237,7 +235,7 @@ app.get('/executar-conBD/:socialMedia',(req, res) =>{
                             </tbody>
                         </table>
                         <footer>
-                            Trabalho Universitário - LP - Leandro D'Água
+                            Trabalho Universitário - LP - Leandro D'Água, Rafaela Pereira
                         </footer>
                         <style>
                         h2 {
