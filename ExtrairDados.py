@@ -9,9 +9,9 @@ import snscrape.modules.twitter as sntwitter
 def insertBD(text, date, social):
     con = mysql.connector.connect(
         host='localhost',
-        user='rafaela',
-        password='rafaela17',
-        database='lp'
+        user='root',
+        password='estgoh',
+        database='bd'
     )
 
     if con.is_connected():
@@ -37,7 +37,7 @@ def reddit_app():
     )
 
     subreddit = reddit.subreddit('all')
-    keywords = 'tester'
+    keywords = 'product'
 
     for submission in subreddit.search(keywords, limit=1000):
         text = submission.selftext
@@ -137,7 +137,7 @@ def twitter_app():
 
     payload = {
         'api_key': 'af72815ef323c3513189062ad5b1eccf',
-        'query': 'tester',
+        'query': 'product',
         'num': '1000'
     }
 

@@ -57,7 +57,7 @@ function conBD(socialMedia, callback) {
             return;
         }
         
-        const query = `SELECT * FROM tabcomentarios WHERE Social_media = "${socialMedia}" ORDER BY Date DESC`;
+        const query = `SELECT * FROM tabcomentarios WHERE Social_media = "${socialMedia}" ORDER BY Date DESC LIMIT 10`;
 
         connection.query(query, (err, results, fields) => {
             connection.release(); // Libera a conexão de volta para o pool
@@ -70,32 +70,6 @@ function conBD(socialMedia, callback) {
                 callback(null, results);
             }
         });
-    });
-}
-function nextComment(classification){
-    currentPage++;
-    renderComments(classification);
-}
-
-function renderComments(classification){
-    const startIndex = (currentPage - 1) * commentsPerPage;
-    const endIndex = startIndex + commentsPerPage;
-    const currentComments = comments.slice(startIndex,endIndex);
-
-    const tableBodyId = classification === "1" ? "tabelaPositivos" : "tabelaNegativos";
-    const tableBody = document.getElementById(tableBodyId);
-    tableBody.innerHTML = '';
-
-    currentComments.forEach(comment => {
-        const formattedDate = new Date(comment.Date).toLocaleDateString('pt-BR');
-        const row = `
-            <tr>
-                <td>${formattedDate}</td>
-                <td>${comment.Text}</td>
-                <td>${comment.Classification}</td>
-            </tr>
-        `;
-        tableBody.innerHTML += row;
     });
 }
 
@@ -240,7 +214,6 @@ app.get('/executar-conBD/:socialMedia',(req, res) =>{
                             }).join('')}
                             </tbody>
                         </table>
-                        <button onClick="nextComment('1')">...</button>
                         <h2>Comentários Negativos</h2>
                         <table>
                             <thead>
@@ -263,7 +236,6 @@ app.get('/executar-conBD/:socialMedia',(req, res) =>{
                             }).join('')}
                             </tbody>
                         </table>
-                        <button onClick="nextComment("0")">...</button>
                         <footer>
                             Trabalho Universitário - LP - Leandro D'Água
                         </footer>
