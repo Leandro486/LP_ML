@@ -147,7 +147,7 @@ def classification():
         comentario = [word for word in comentario if word not in stopwords.words('english')]
         comentario = [lemmatizer.lemmatize(word) for word in comentario]
         comentario = ' '.join(comentario)
-
+        
         comentario_cv = cv.transform([comentario])
 
         previsao = lr.predict(comentario_cv)
